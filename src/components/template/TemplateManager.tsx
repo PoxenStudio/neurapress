@@ -180,11 +180,11 @@ export function TemplateManager({ onTemplateChange }: TemplateManagerProps) {
           模板管理
         </Button>
       </DialogTrigger>
-      <DialogContent className="max-w-4xl">
+      <DialogContent className="max-w-4xl max-h-[85vh] flex flex-col">
         <DialogHeader>
           <DialogTitle>模板管理</DialogTitle>
         </DialogHeader>
-        <Tabs defaultValue="all">
+        <Tabs defaultValue="all" className="flex flex-col flex-1 min-h-0">
           <TabsList>
             <TabsTrigger value="all">所有模板</TabsTrigger>
             <TabsTrigger value="favorites">收藏模板</TabsTrigger>
@@ -192,7 +192,7 @@ export function TemplateManager({ onTemplateChange }: TemplateManagerProps) {
             <TabsTrigger value="add">添加模板</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="all" className="space-y-4">
+          <TabsContent value="all" className="space-y-4 flex-1 min-h-0 overflow-y-auto pr-1">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {allTemplates.map((template) => (
                 <div key={template.id} className="relative border rounded-lg p-4">
@@ -219,7 +219,7 @@ export function TemplateManager({ onTemplateChange }: TemplateManagerProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="favorites" className="space-y-4">
+          <TabsContent value="favorites" className="space-y-4 flex-1 min-h-0 overflow-y-auto pr-1">
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {allTemplates
                 .filter(template => favoriteIds.includes(template.id))
@@ -241,7 +241,7 @@ export function TemplateManager({ onTemplateChange }: TemplateManagerProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="custom" className="space-y-4">
+          <TabsContent value="custom" className="space-y-4 flex-1 min-h-0 overflow-y-auto pr-1">
             <div className="flex justify-between mb-4">
               <div className="space-x-2">
                 <Button onClick={handleExportTemplates}>
@@ -283,7 +283,7 @@ export function TemplateManager({ onTemplateChange }: TemplateManagerProps) {
             </div>
           </TabsContent>
 
-          <TabsContent value="add" className="space-y-4">
+          <TabsContent value="add" className="space-y-4 flex-1 min-h-0 overflow-y-auto pr-1">
             <div className="grid gap-4">
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
