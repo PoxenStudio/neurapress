@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   app:
     build:
@@ -13,4 +11,4 @@ services:
       - /app/.next
     environment:
       - NODE_ENV=development
-    command: pnpm dev 
+    command: pnpm dev
