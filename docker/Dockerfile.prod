@@ -1,5 +1,7 @@
 # Build stage
-FROM node:20-alpine AS builder
+# 构建阶段固定在构建机原生架构上运行（不经 QEMU 模拟）：
+# next build 的 standalone 产物是纯 JS，不含原生模块，可直接用于各目标架构
+FROM --platform=$BUILDPLATFORM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -30,17 +32,15 @@ ENV NODE_ENV=production \
     PORT=3000 \
     HOSTNAME=0.0.0.0
 
-# Add a non-root user
-RUN addgroup -g 1001 -S nodejs && \
-    adduser -S nextjs -u 1001
-
+# 运行阶段不包含 RUN 指令，跨架构构建时无需在 QEMU 中执行任何命令；
+# 使用官方镜像自带的非 root 用户 node
 # Copy only the standalone server output, static assets and public files
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-COPY --from=builder --chown=nextjs:nodejs /app/public ./public
+COPY --from=builder --chown=node:node /app/.next/standalone ./
+COPY --from=builder --chown=node:node /app/.next/static ./.next/static
+COPY --from=builder --chown=node:node /app/public ./public
 
 # Switch to non-root user
-USER nextjs
+USER node
 
 # Expose port
 EXPOSE 3000

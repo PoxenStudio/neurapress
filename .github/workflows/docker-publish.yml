@@ -20,9 +20,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
-
+      # Dockerfile 的构建阶段在 runner 原生架构上运行，arm64 镜像只复制构建产物，
+      # 不需要 QEMU 模拟执行任何命令
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
