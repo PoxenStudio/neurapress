@@ -3,7 +3,7 @@
 BRANCH := $(shell git branch --show-current)
 IMAGE := poxenstudio/neurapress:$(BRANCH)
 LATEST_IMAGE := poxenstudio/neurapress:latest
-BUILDER ?= shuku-builder
+BUILDER ?= shukubuilder
 PLATFORMS ?= linux/amd64,linux/arm64
 
 $(info Building image: $(IMAGE))

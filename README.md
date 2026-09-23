@@ -59,13 +59,19 @@ pnpm start
 
 ```bash
 # 启动开发环境
-docker compose -f docker/docker-compose.yml up
+docker compose -f docker/docker-compose-dev.yml up
 
 # 在后台运行
-docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose-dev.yml up -d
 
 # 停止服务
-docker compose -f docker/docker-compose.yml down
+docker compose -f docker/docker-compose-dev.yml down
+```
+
+用户设置、文章、草稿和模板目前保存在浏览器的 `localStorage` 中。生产 Compose 预留了项目根目录的 `data` 目录作为容器持久化目录，挂载到 `/app/data`：
+
+```bash
+docker compose -f docker/docker-compose.yml up -d
 ```
 
 #### 生产环境

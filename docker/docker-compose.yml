@@ -1,14 +1,10 @@
 services:
   app:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.dev
+    image: poxenstudio/neurapress:latest
     ports:
       - "3000:3000"
     volumes:
-      - ..:/app
-      - /app/node_modules
-      - /app/.next
+      - ./data:/app/data
     environment:
-      - NODE_ENV=development
-    command: pnpm dev
+      - NODE_ENV=production
+    restart: unless-stopped
