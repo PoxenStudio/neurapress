@@ -16,6 +16,7 @@ import { DEFAULT_TEMPLATE_ID } from '@/config/wechat-templates'
 import { cn } from '@/lib/utils'
 import { usePreviewContent } from './hooks/usePreviewContent'
 import { useEditorKeyboard } from './hooks/useEditorKeyboard'
+import { useImagePaste } from './hooks/useImagePaste'
 import { useScrollSync } from './hooks/useScrollSync'
 import { useWordStats } from './hooks/useWordStats'
 import { useCopy } from './hooks/useCopy'
@@ -84,6 +85,13 @@ export default function WechatEditor() {
     styleOptions,
     codeTheme
   })
+
+  const handleValueChange = useCallback((newValue: string) => {
+    setValue(newValue)
+    handleEditorChange(newValue)
+  }, [handleEditorChange])
+
+  const { handlePaste } = useImagePaste({ value, onChange: handleValueChange })
 
   const { handleKeyDown } = useEditorKeyboard({
     value,
@@ -321,6 +329,7 @@ export default function WechatEditor() {
           onEditorScroll={handleEditorScroll}
           onPreviewSizeChange={setPreviewSize}
           onCopy={handleCopy}
+          onPaste={handlePaste}
         />
 
         {/* 桌面设备编辑器 */}
@@ -341,6 +350,7 @@ export default function WechatEditor() {
           onPreviewSizeChange={setPreviewSize}
           onToolbarInsert={handleToolbarInsert}
           onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
         />
       </div>
 

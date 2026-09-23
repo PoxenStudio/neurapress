@@ -58,3 +58,5 @@ Thumbs.db
 .cache/
 .npm/
 .pnpm-store/ 
+# uploaded images (local dev)
+/data

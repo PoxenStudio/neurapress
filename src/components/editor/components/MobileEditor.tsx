@@ -22,6 +22,7 @@ interface MobileEditorProps {
   onEditorScroll: (e: React.UIEvent<HTMLTextAreaElement>) => void
   onPreviewSizeChange: (size: PreviewSize) => void
   onCopy: () => Promise<boolean>
+  onPaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
 }
 
 export function MobileEditor({
@@ -37,7 +38,8 @@ export function MobileEditor({
   onEditorChange,
   onEditorScroll,
   onPreviewSizeChange,
-  onCopy
+  onCopy,
+  onPaste
 }: MobileEditorProps) {
   return (
     <div className="md:hidden h-full">
@@ -53,6 +55,7 @@ export function MobileEditor({
           <div className="relative flex-1">
             <textarea
               ref={textareaRef}
+              onPaste={onPaste}
               value={value}
               onChange={e => {
                 const scrollTop = e.target.scrollTop;

@@ -24,6 +24,7 @@ interface DesktopEditorProps {
   onPreviewSizeChange: (size: PreviewSize) => void
   onToolbarInsert: (text: string, options?: { wrap?: boolean; placeholder?: string; suffix?: string }) => void
   onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void
+  onPaste: (e: React.ClipboardEvent<HTMLTextAreaElement>) => void
 }
 
 export function DesktopEditor({
@@ -42,7 +43,8 @@ export function DesktopEditor({
   onEditorScroll,
   onPreviewSizeChange,
   onToolbarInsert,
-  onKeyDown
+  onKeyDown,
+  onPaste
 }: DesktopEditorProps) {
   return (
     <div className="hidden md:flex flex-1 h-full">
@@ -57,6 +59,7 @@ export function DesktopEditor({
         <div className="flex-1 overflow-hidden">
           <textarea
             ref={textareaRef}
+            onPaste={onPaste}
             value={value}
             onChange={e => {
               const scrollTop = e.target.scrollTop;

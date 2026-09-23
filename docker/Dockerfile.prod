@@ -20,7 +20,7 @@ COPY . .
 
 # Build application (next.config.js uses output: 'standalone')
 ENV NEXT_TELEMETRY_DISABLED=1
-RUN pnpm build
+RUN pnpm build && mkdir -p /app/data/images
 
 # Production stage
 FROM node:20-alpine AS runner
@@ -38,6 +38,8 @@ ENV NODE_ENV=production \
 COPY --from=builder --chown=node:node /app/.next/standalone ./
 COPY --from=builder --chown=node:node /app/.next/static ./.next/static
 COPY --from=builder --chown=node:node /app/public ./public
+# 粘贴上传的图片目录（通常挂载为数据卷）
+COPY --from=builder --chown=node:node /app/data ./data
 
 # Switch to non-root user
 USER node

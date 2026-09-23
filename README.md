@@ -25,9 +25,39 @@ services:
     image: poxenstudio/neurapress
     ports:
       - "3000:3000"
+    volumes:
+      - ./data:/app/data
     restart: unless-stopped
 ```
-所有用户数据记录于浏览器中，没有后台服务，没有持久化数据。
+文章、模板设置等数据都记录在浏览器中；只有粘贴的图片保存在服务器上（见下文）。
+
+### 粘贴图片
+
+在编辑器中粘贴剪贴板图片时，图片保存到服务器的 `/app/data/images/<年-月>/` 目录，并插入完整链接：
+
+```
+![image.png](https://md.example.com/images/2026-09/<时间戳>-<uuid>.png)
+```
+
+```
+services:
+  app:
+    image: poxenstudio/neurapress
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./data:/app/data                         # 持久化图片
+    environment:
+      # - IMAGE_STORAGE_LIMIT_MB=5120            # 图片总容量上限，默认 5GB
+    restart: unless-stopped
+```
+
+注意：
+
+- 粘贴到公众号时由微信服务器抓取图片，站点需要能从外网访问（建议 HTTPS），内网或 localhost 部署时公众号中的图片无法显示。
+- 图片链接使用浏览器当前访问的域名生成，请通过对外域名打开编辑器（用内网地址或 localhost 编辑时生成的链接公众号无法访问）；更换域名后已插入的旧链接会失效。
+- 容器以 uid 1000 运行，挂载宿主机目录前需要授权：`mkdir -p data && sudo chown -R 1000:1000 data`。
+- 单张图片不超过 10MB，支持 PNG、JPG、GIF、WebP；同一 IP 每 10 分钟最多上传 30 张；总容量达到上限后拒绝上传。
 
 
 ## 快速开始
