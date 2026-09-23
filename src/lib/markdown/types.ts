@@ -125,4 +125,6 @@ export interface RendererOptions {
     latex?: StyleOptions
   }
   codeTheme?: CodeThemeId
+  // 为 true 时不附加内置默认样式，排版完全交给模板 CSS
+  plain?: boolean
 } 

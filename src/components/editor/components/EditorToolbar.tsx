@@ -129,19 +129,19 @@ export function EditorToolbar({
                 NeuraPress
               </Link>
               <div className="hidden sm:block">
-                <ArticleList 
+                <ArticleList
                   onSelect={onArticleSelect}
                   currentContent={value}
                   onNew={onNewArticle}
                 />
               </div>
-              <WechatStylePicker 
-                value={selectedTemplate} 
-                onSelect={onTemplateSelect} 
-              /> 
+              <WechatStylePicker
+                value={selectedTemplate}
+                onSelect={onTemplateSelect}
+              />
               <div className="hidden sm:block">
-                <CodeThemeSelector 
-                  value={codeTheme} 
+                <CodeThemeSelector
+                  value={codeTheme}
                   onChange={onCodeThemeChange}
                 />
               </div>
@@ -158,7 +158,7 @@ export function EditorToolbar({
                 onClick={onPreviewToggle}
                 className={cn(
                   "inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors justify-center hidden sm:inline-flex",
-                  showPreview 
+                  showPreview
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : "bg-muted text-muted-foreground hover:bg-muted/90"
                 )}
@@ -175,7 +175,7 @@ export function EditorToolbar({
                 onClick={onSave}
                 className={cn(
                   "inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md text-sm transition-colors hidden sm:inline-flex",
-                  isDraft 
+                  isDraft
                     ? "bg-primary text-primary-foreground hover:bg-primary/90"
                     : "bg-muted text-muted-foreground hover:bg-muted/90"
                 )}
@@ -183,7 +183,7 @@ export function EditorToolbar({
                 <Save className="h-4 w-4" />
                 <span>保存</span>
               </button>
-              
+
               <button
                 onClick={onClear}
                 className="sm:hidden inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-md bg-destructive text-destructive-foreground hover:bg-destructive/90 text-sm transition-colors"
@@ -206,7 +206,7 @@ export function EditorToolbar({
                   asChild
                 >
                   <Link
-                    href="https://github.com/tianyaxiang/neurapress"
+                    href="https://github.com/poxenstudio/neurapress"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
@@ -221,4 +221,4 @@ export function EditorToolbar({
       </div>
     </div>
   )
-} 
+}

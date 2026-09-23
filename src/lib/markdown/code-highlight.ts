@@ -43,11 +43,12 @@ export function highlightCode(text: string, lang: string, codeTheme: CodeThemeId
     const lines = text.split('\n')
     const lineNumbersWidth = lines.length.toString().length * 8 + 20
 
+    // 每行已是块级 div，<pre> 中额外的换行符会渲染成空行，因此直接拼接
     return lines.map((line, index) => {
       const lineTokens = Prism.tokenize(line, grammar)
       const processedLine = lineTokens.map(t => processToken(t, codeTheme)).join('')
       return `<div class="code-line"><span class="line-number" style="width:${lineNumbersWidth}px;color:#999;padding-right:1em;text-align:right;display:inline-block;user-select:none;">${index + 1}</span>${processedLine}</div>`
-    }).join('\n')
+    }).join('')
   } catch (error) {
     console.error(`Error highlighting code: ${error}`)
     return text

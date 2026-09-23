@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { Suspense } from 'react'
 import { Logo } from '@/components/icons/Logo'
 import { Loader2 } from 'lucide-react'
-import { AdBanner } from '@/components/ui/AdBanner'
 
 const LoadingLogo = () => (
   <div className="h-full bg-background flex items-center justify-center">
@@ -41,18 +40,6 @@ export default function WechatPage() {
           <WechatEditor />
         </Suspense>
       </div>
-      
-      {/* 浮动广告位 */}
-      <AdBanner
-        id="wechat-editor-banner-v1"
-        title="诗词有典小程序"
-        description=""
-        expireDays={1}
-        floating={true}
-        onClose={() => {
-          console.log('广告已关闭')
-        }}
-      />
     </main>
   )
 } 

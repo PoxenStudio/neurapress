@@ -27,7 +27,7 @@ NeuraPress 是一个现代化的 Markdown 编辑器，专注于提供优质的�
 
 ```bash
 # 克隆项目
-git clone https://github.com/tianyaxiang/neurapress.git
+git clone https://github.com/poxenstudio/neurapress.git
 
 # 进入项目目录
 cd neurapress
@@ -148,7 +148,7 @@ docker run -p 3000:3000 [your-dockerhub-username]/neurapress:latest
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=tianyaxiang/neurapress&type=date&legend=top-left)](https://www.star-history.com/#tianyaxiang/neurapress&type=date&legend=top-left)
+[![Star History Chart](https://api.star-history.com/svg?repos=poxenstudio/neurapress&type=date&legend=top-left)](https://www.star-history.com/#poxenstudio/neurapress&type=date&legend=top-left)
 
 ## 贡献指南
 

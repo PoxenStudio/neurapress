@@ -3,6 +3,7 @@
 import { useCallback } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { initializeMermaid } from '@/lib/markdown/mermaid-utils'
+import { inlineTemplateStyles } from '@/lib/wechat/inline-styles'
 
 export const useCopy = () => {
   const { toast } = useToast()
@@ -11,9 +12,9 @@ export const useCopy = () => {
     if (!contentElement) return false
 
     try {
-      // 创建临时容器并渲染内容
+      // 创建临时容器并渲染内容（模板 CSS 展开为内联样式，公众号会丢弃 <style>）
       const tempDiv = document.createElement('div')
-      tempDiv.innerHTML = contentElement.innerHTML
+      tempDiv.innerHTML = inlineTemplateStyles(contentElement).innerHTML
       document.body.appendChild(tempDiv)
 
       // 处理 Mermaid 图表

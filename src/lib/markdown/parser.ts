@@ -117,6 +117,7 @@ export class MarkdownParser {
   public parse(markdown: string): string {
     const preprocessed = this.preprocessMarkdown(markdown)
     const html = marked.parse(preprocessed, { renderer: this.renderer.getRenderer() }) as string
+    if (this.options.plain) return html
     const baseStyles = baseStylesToString(this.options.base)
     return baseStyles ? `<section style="${baseStyles}">${html}</section>` : html
   }

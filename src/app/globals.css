@@ -477,50 +477,50 @@
   margin-bottom: -8px !important;
 }
 
-/* 暗黑模式下的预览内容样式 */
+/* 暗黑模式下的预览内容样式（公众号模板自带配色，不受暗色主题影响） */
 .dark .preview-content {
   color: hsl(var(--foreground));
 }
 
-.dark .preview-content h1,
-.dark .preview-content h2,
-.dark .preview-content h3,
-.dark .preview-content h4,
-.dark .preview-content h5,
-.dark .preview-content h6 {
+.dark .preview-content h1:not(.wechat-article *),
+.dark .preview-content h2:not(.wechat-article *),
+.dark .preview-content h3:not(.wechat-article *),
+.dark .preview-content h4:not(.wechat-article *),
+.dark .preview-content h5:not(.wechat-article *),
+.dark .preview-content h6:not(.wechat-article *) {
   color: hsl(var(--foreground));
 }
 
-.dark .preview-content p {
+.dark .preview-content p:not(.wechat-article *) {
   color: hsl(var(--foreground));
 }
 
-.dark .preview-content pre {
+.dark .preview-content pre:not(.wechat-article *) {
   background: hsl(var(--muted));
   border: 1px solid hsl(var(--border));
 }
 
-.dark .preview-content code {
+.dark .preview-content code:not(.wechat-article *) {
   background: hsl(var(--muted));
   color: hsl(var(--accent-foreground));
 }
 
-.dark .preview-content blockquote {
+.dark .preview-content blockquote:not(.wechat-article *) {
   background: hsl(var(--muted));
   border-left-color: hsl(var(--primary));
   color: hsl(var(--muted-foreground));
 }
 
-.dark .preview-content img {
+.dark .preview-content img:not(.wechat-article *) {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
-.dark .preview-content th {
+.dark .preview-content th:not(.wechat-article *) {
   background: hsl(var(--muted));
 }
 
-.dark .preview-content td,
-.dark .preview-content th {
+.dark .preview-content td:not(.wechat-article *),
+.dark .preview-content th:not(.wechat-article *) {
   border-color: hsl(var(--border));
 }
 

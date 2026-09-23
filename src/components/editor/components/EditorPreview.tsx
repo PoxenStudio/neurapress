@@ -3,7 +3,6 @@
 import { cn } from '@/lib/utils'
 import { PREVIEW_SIZES, type PreviewSize } from '../constants'
 import { Loader2, ZoomIn, ZoomOut, Maximize2, Minimize2 } from 'lucide-react'
-import { templates } from '@/config/wechat-templates'
 import { useState, useRef, useEffect, useMemo } from 'react'
 import { type CodeThemeId } from '@/config/code-themes'
 import { useTheme } from 'next-themes'
@@ -24,7 +23,6 @@ interface EditorPreviewProps {
 
 export function EditorPreview({
   previewRef,
-  selectedTemplate,
   previewSize,
   isConverting,
   previewContent,
@@ -78,18 +76,14 @@ export function EditorPreview({
   // 使用 memo 包装预览内容
   const PreviewContent = useMemo(() => {
     return (
-      <div className={cn(
-        "preview-content py-4",
-        "prose prose-slate dark:prose-invert max-w-none",
-        selectedTemplate && templates.find(t => t.id === selectedTemplate)?.styles
-      )}>
+      <div className="preview-content py-4">
         <div 
           className="px-6"
           dangerouslySetInnerHTML={{ __html: previewContent }}
         />
       </div>
     )
-  }, [previewContent, selectedTemplate])
+  }, [previewContent])
 
   // 渲染 Mermaid 图表
   useEffect(() => {
@@ -173,7 +167,6 @@ export function EditorPreview({
         "preview-container bg-background transition-all duration-300 ease-in-out flex flex-col",
         "h-full sm:w-1/2",
         "markdown-body relative",
-        selectedTemplate && templates.find(t => t.id === selectedTemplate)?.styles,
         `code-theme-${codeTheme}`
       )}
     >

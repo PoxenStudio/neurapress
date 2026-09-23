@@ -4,7 +4,7 @@ Markdown 转微信公众帐号内容神器，能让`Markdown`内容，无需作�
 
 GitHub 地址：
 
-[https://github.com/tianyaxiang/neurapress](https://github.com/tianyaxiang/neurapress)
+[https://github.com/poxenstudio/neurapress](https://github.com/poxenstudio/neurapress)
 
 > 使用微信公众号编辑器有一个十分头疼的问题——粘贴出来的代码，格式错乱，而且特别丑。
 
@@ -142,7 +142,7 @@ function showSnackbar() {
 - 代码长度溢出时横向滚动
 
 **更多请参考**：
-[NeuraPress版本更新记录](https://github.com/tianyaxiang/neurapress)
+[NeuraPress版本更新记录](https://github.com/poxenstudio/neurapress)
 
 ![qrcode](https://open.weixin.qq.com/qr/code?username=gh_e0164b13e4a0)
 

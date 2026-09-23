@@ -12,7 +12,7 @@ import { type PreviewSize } from './constants'
 import { useLocalStorage } from '@/hooks/use-local-storage'
 import { codeThemes, type CodeThemeId } from '@/config/code-themes'
 import '@/styles/code-themes.css'
-import { templates } from '@/config/wechat-templates'
+import { DEFAULT_TEMPLATE_ID } from '@/config/wechat-templates'
 import { cn } from '@/lib/utils'
 import { usePreviewContent } from './hooks/usePreviewContent'
 import { useEditorKeyboard } from './hooks/useEditorKeyboard'
@@ -34,7 +34,7 @@ export default function WechatEditor() {
   
   // 状态管理
   const [value, setValue] = useState('')
-  const [selectedTemplate, setSelectedTemplate] = useState<string>('default')
+  const [selectedTemplate, setSelectedTemplate] = useState<string>(DEFAULT_TEMPLATE_ID)
   const [showPreview, setShowPreview] = useState(true)
   const [styleOptions, setStyleOptions] = useState<RendererOptions>({})
   const [previewSize, setPreviewSize] = useState<PreviewSize>('medium')

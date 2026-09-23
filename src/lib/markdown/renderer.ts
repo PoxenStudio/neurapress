@@ -1,6 +1,6 @@
 import { marked } from 'marked'
 import type { Tokens, TokenizerAndRendererExtension } from 'marked'
-import type { RendererOptions } from './types'
+import type { RendererOptions, StyleOptions } from './types'
 import { cssPropertiesToString } from './styles'
 import { highlightCode } from './code-highlight'
 import katex from 'katex'
@@ -134,6 +134,11 @@ export class MarkdownRenderer {
     marked.use({ extensions: [mermaidBlockTokenizer] })
   }
 
+  // plain 模式下只输出调用方显式传入的样式，由模板 CSS 负责其余排版
+  private withDefaults(own: StyleOptions, defaults: StyleOptions): StyleOptions {
+    return this.options.plain ? own : { ...own, ...defaults }
+  }
+
   private initializeRenderer() {
     // 重写 text 方法来处理行内 LaTeX 公式
     this.renderer.text = (token: Tokens.Text | Tokens.Escape) => {
@@ -155,10 +160,9 @@ export class MarkdownRenderer {
     this.renderer.heading = ({ text, depth }: Tokens.Heading) => {
       const headingKey = `h${depth}` as keyof RendererOptions['block']
       const headingStyle = (this.options.block?.[headingKey] || {})
-      const style = {
-        ...headingStyle,
+      const style = this.withDefaults(headingStyle, {
         color: this.options.base?.themeColor
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       const tokens = marked.Lexer.lexInline(text)
       const content = marked.Parser.parseInline(tokens, { renderer: this.renderer })
@@ -168,11 +172,10 @@ export class MarkdownRenderer {
     // 重写 paragraph 方法
     this.renderer.paragraph = ({ text, tokens }: Tokens.Paragraph) => {
       const paragraphStyle = (this.options.block?.p || {})
-      const style = {
-        ...paragraphStyle,
+      const style = this.withDefaults(paragraphStyle, {
         fontSize: this.options.base?.fontSize,
         lineHeight: this.options.base?.lineHeight
-      }
+      })
       const styleStr = cssPropertiesToString(style)
 
       // 处理段落中的内联标记
@@ -196,10 +199,9 @@ export class MarkdownRenderer {
     // 重写 blockquote 方法
     this.renderer.blockquote = ({ text }: Tokens.Blockquote) => {
       const blockquoteStyle = (this.options.block?.blockquote || {})
-      const style = {
-        ...blockquoteStyle,
+      const style = this.withDefaults(blockquoteStyle, {
         borderLeft: `4px solid ${this.options.base?.themeColor || '#1a1a1a'}`
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       const tokens = marked.Lexer.lexInline(text)
       const content = marked.Parser.parseInline(tokens, { renderer: this.renderer })
@@ -230,10 +232,9 @@ export class MarkdownRenderer {
     // 重写 em 方法
     this.renderer.em = ({ text }: Tokens.Em) => {
       const emStyle = (this.options.inline?.em || {})
-      const style = {
-        ...emStyle,
+      const style = this.withDefaults(emStyle, {
         fontStyle: 'italic'
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       const tokens = marked.Lexer.lexInline(text)
       const content = marked.Parser.parseInline(tokens, { renderer: this.renderer })
@@ -243,11 +244,10 @@ export class MarkdownRenderer {
     // 重写 strong 方法
     this.renderer.strong = ({ text }: Tokens.Strong) => {
       const strongStyle = (this.options.inline?.strong || {})
-      const style = {
-        ...strongStyle,
+      const style = this.withDefaults(strongStyle, {
         color: this.options.base?.themeColor,
         fontWeight: 'bold'
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       const tokens = marked.Lexer.lexInline(text)
       const content = marked.Parser.parseInline(tokens, { renderer: this.renderer })
@@ -265,12 +265,11 @@ export class MarkdownRenderer {
     // 重写 image 方法
     this.renderer.image = ({ href, title, text }: Tokens.Image) => {
       const imageStyle = (this.options.block?.image || {})
-      const style = {
-        ...imageStyle,
+      const style = this.withDefaults(imageStyle, {
         maxWidth: '100%',
         display: 'block',
         margin: '0.5em auto'
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       return `<img src="${href}"${title ? ` title="${title}"` : ''} alt="${text}"${styleStr ? ` style="${styleStr}"` : ''}>`
     }
@@ -279,12 +278,11 @@ export class MarkdownRenderer {
     this.renderer.list = (token: Tokens.List) => {
       const tag = token.ordered ? 'ol' : 'ul'
       const listStyle = (this.options.block?.[tag] || {})
-      const style = {
-        ...listStyle,
+      const style = this.withDefaults(listStyle, {
         listStyle: token.ordered ? 'decimal' : 'disc',
         paddingLeft: '2em',
         marginBottom: '16px'
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       const startAttr = token.ordered && token.start !== 1 ? ` start="${token.start}"` : ''
       
@@ -303,11 +301,10 @@ export class MarkdownRenderer {
     // 重写 listitem 方法
     this.renderer.listitem = (item: Tokens.ListItem) => {
       const listitemStyle = (this.options.inline?.listitem || {})
-      const style = {
-        ...listitemStyle,
+      const style = this.withDefaults(listitemStyle, {
         marginBottom: '8px',
         display: 'list-item'
-      }
+      })
       const styleStr = cssPropertiesToString(style)
       
       // 处理嵌套列表和内容

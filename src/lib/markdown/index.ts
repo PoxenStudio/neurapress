@@ -72,12 +72,14 @@ export const defaultOptions: RendererOptions = {
 }
 
 export function convertToWechat(markdown: string, options: RendererOptions = defaultOptions): string {
-  const mergedOptions = {
-    base: { ...defaultOptions.base, ...options.base },
-    block: { ...defaultOptions.block, ...options.block },
-    inline: { ...defaultOptions.inline, ...options.inline },
-    codeTheme: options.codeTheme || 'github'
-  }
+  const mergedOptions: RendererOptions = options.plain
+    ? { ...options, codeTheme: options.codeTheme || 'github' }
+    : {
+      base: { ...defaultOptions.base, ...options.base },
+      block: { ...defaultOptions.block, ...options.block },
+      inline: { ...defaultOptions.inline, ...options.inline },
+      codeTheme: options.codeTheme || 'github'
+    }
 
   const parser = new MarkdownParser(mergedOptions)
   return parser.parse(markdown)

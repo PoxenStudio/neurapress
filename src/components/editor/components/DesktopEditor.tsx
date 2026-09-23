@@ -2,7 +2,6 @@
 
 import { type RefObject } from 'react'
 import { cn } from '@/lib/utils'
-import { templates } from '@/config/wechat-templates'
 import { EditorPreview } from './EditorPreview'
 import { MarkdownToolbar } from './MarkdownToolbar'
 import { type PreviewSize } from '../constants'
@@ -51,8 +50,7 @@ export function DesktopEditor({
         ref={editorRef}
         className={cn(
           "editor-container bg-background transition-all duration-300 ease-in-out flex flex-col h-full",
-          showPreview ? "w-1/2 border-r" : "w-full",
-          selectedTemplate && templates.find(t => t.id === selectedTemplate)?.styles
+          showPreview ? "w-1/2 border-r" : "w-full"
         )}
       >
         <MarkdownToolbar onInsert={onToolbarInsert} />

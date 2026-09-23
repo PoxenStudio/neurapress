@@ -27,6 +27,7 @@ import { FileText, Trash2, Menu, Plus, Save, Edit2, Check } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 import { ToastAction } from '@/components/ui/toast'
 import { Input } from '@/components/ui/input'
+import { DEFAULT_TEMPLATE_ID } from '@/config/wechat-templates'
 
 interface Article {
   id: string
@@ -81,7 +82,7 @@ export function ArticleList({ onSelect, currentContent, onNew }: ArticleListProp
       id: Date.now().toString(),
       title,
       content: currentContent,
-      template: 'default', // 默认模板
+      template: DEFAULT_TEMPLATE_ID,
       createdAt: Date.now(),
       updatedAt: Date.now()
     }
@@ -146,7 +147,7 @@ export function ArticleList({ onSelect, currentContent, onNew }: ArticleListProp
 > 作者：[你的名字]
 > 日期：${new Date().toLocaleDateString()}
 `,
-      template: 'default',
+      template: DEFAULT_TEMPLATE_ID,
       createdAt: Date.now(),
       updatedAt: Date.now()
     }

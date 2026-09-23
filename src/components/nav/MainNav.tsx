@@ -60,7 +60,7 @@ export function MainNav() {
               asChild
             >
               <Link
-                href="https://github.com/tianyaxiang/neurapress"
+                href="https://github.com/poxenstudio/neurapress"
                 target="_blank"
                 rel="noopener noreferrer"
               >
@@ -73,4 +73,4 @@ export function MainNav() {
       </div>
     </nav>
   )
-} 
+}
