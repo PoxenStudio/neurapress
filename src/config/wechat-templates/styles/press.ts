@@ -1692,7 +1692,7 @@ export const pressTemplates: WechatTemplate[] = [
 }
 
 .wechat-article blockquote::before {
-  content: 'ANALYSIS';
+  content: '';
   display: block;
   font-family: -apple-system, "Helvetica Neue", sans-serif;
   font-size: 10px;
