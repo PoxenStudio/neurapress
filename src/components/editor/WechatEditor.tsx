@@ -37,7 +37,7 @@ export default function WechatEditor() {
   const [selectedTemplate, setSelectedTemplate] = useState<string>(DEFAULT_TEMPLATE_ID)
   const [showPreview, setShowPreview] = useState(true)
   const [styleOptions, setStyleOptions] = useState<RendererOptions>({})
-  const [previewSize, setPreviewSize] = useState<PreviewSize>('medium')
+  const [previewSize, setPreviewSize] = useState<PreviewSize>('full')
   const [isDraft, setIsDraft] = useState(false)
   const [codeTheme, setCodeTheme] = useLocalStorage<CodeThemeId>('code-theme', codeThemes[0].id)
 
