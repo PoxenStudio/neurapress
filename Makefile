@@ -22,4 +22,4 @@ build-multiarch:
 		-f docker/Dockerfile.prod \
 		-t $(IMAGE) \
 		-t $(LATEST_IMAGE) \
-		--push .
+		--load .
