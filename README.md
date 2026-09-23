@@ -16,6 +16,20 @@ NeuraPress 是一个现代化的 Markdown 编辑器，专注于提供优质的�
 - 🎭 模板系统 - 内置多种排版模板，一键切换
 - 🚀 快速高效 - 基于 Next.js 构建，性能优异
 
+## Docker部署
+
+使用非常简单的compose文件部署：
+```
+services:
+  app:
+    image: poxenstudio/neurapress
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+```
+所有用户数据记录于浏览器中，没有后台服务，没有持久化数据。
+
+
 ## 快速开始
 
 ### 环境要求
