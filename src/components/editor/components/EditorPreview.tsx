@@ -3,12 +3,50 @@
 import { cn } from '@/lib/utils'
 import { PREVIEW_SIZES, type PreviewSize } from '../constants'
 import { Loader2, ZoomIn, ZoomOut, Maximize2, Minimize2 } from 'lucide-react'
-import { useState, useRef, useEffect, useMemo } from 'react'
+import { useState, useRef, useEffect, useLayoutEffect } from 'react'
 import { type CodeThemeId } from '@/config/code-themes'
-import { useTheme } from 'next-themes'
 import '@/styles/code-themes.css'
 import mermaid from 'mermaid'
 import { useScrollSync } from '../hooks/useScrollSync'
+import { patchPreview } from '../utils/patchPreview'
+
+// 按图表源码缓存渲染结果，内容不变时无需重新渲染
+const mermaidCache = new Map<string, string>()
+
+function escapeHtml(text: string) {
+  return text.replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]!))
+}
+
+function renderMermaidDiagrams(container: Element) {
+  container.querySelectorAll('.mermaid').forEach(element => {
+    if (element.hasAttribute('data-mermaid-source')) return
+    const source = element.textContent?.trim() || ''
+    if (!source) return
+    element.setAttribute('data-mermaid-source', source)
+
+    const cached = mermaidCache.get(source)
+    if (cached) {
+      element.innerHTML = cached
+      return
+    }
+
+    mermaid.render(`mermaid-${Math.random().toString(36).substring(2, 9)}`, source)
+      .then(({ svg }) => {
+        mermaidCache.set(source, svg)
+        element.innerHTML = svg
+      })
+      .catch(error => {
+        console.error('Failed to render mermaid diagram:', error)
+        element.innerHTML = `
+          <div class="rounded-lg overflow-hidden border border-red-200">
+            <div class="bg-red-50 p-3 text-red-700 text-sm">Failed to render diagram</div>
+            <pre class="bg-white p-3 m-0 text-sm overflow-x-auto whitespace-pre-wrap break-all">${escapeHtml(source)}</pre>
+            <div class="bg-red-50 p-3 text-red-600 text-sm border-t border-red-200">${escapeHtml(error instanceof Error ? error.message : 'Unknown error')}</div>
+          </div>
+        `
+      })
+  })
+}
 
 interface EditorPreviewProps {
   previewRef: React.RefObject<HTMLDivElement>
@@ -35,12 +73,12 @@ export function EditorPreview({
   const isScrolling = useRef<boolean>(false)
   const contentRef = useRef<HTMLDivElement>(null)
   const { handlePreviewScroll } = useScrollSync()
-  const { theme } = useTheme()
+  const articleRef = useRef<HTMLDivElement>(null)
 
-  // 初始化 Mermaid
+  // 初始化 Mermaid（文章使用模板自带的浅色背景，图表统一使用默认主题）
   useEffect(() => {
     mermaid.initialize({
-      theme: theme === 'dark' ? 'dark' : 'default',
+      theme: 'default',
       startOnLoad: false,
       securityLevel: 'loose',
       fontFamily: 'var(--font-sans)',
@@ -71,83 +109,15 @@ export function EditorPreview({
         rightPadding: 20
       }
     })
-  }, [theme])
+  }, [])
 
-  // 使用 memo 包装预览内容
-  const PreviewContent = useMemo(() => {
-    return (
-      <div className="preview-content py-4">
-        <div 
-          className="px-6"
-          dangerouslySetInnerHTML={{ __html: previewContent }}
-        />
-      </div>
-    )
+  // 增量更新预览内容，并在绘制前补上缓存中的 Mermaid 图，避免闪烁
+  useLayoutEffect(() => {
+    const container = articleRef.current
+    if (!container) return
+    patchPreview(container, previewContent)
+    renderMermaidDiagrams(container)
   }, [previewContent])
-
-  // 渲染 Mermaid 图表
-  useEffect(() => {
-    const renderMermaid = async () => {
-      try {
-        const elements = document.querySelectorAll('.mermaid')
-        if (!elements.length) return
-
-        // 重新初始化所有图表
-        await Promise.all(Array.from(elements).map(async (element) => {
-          try {
-            // 获取内容
-            const content = element.textContent?.trim() || ''
-            if (!content) return
-
-            // 清空容器
-            element.innerHTML = ''
-            
-            // 重新渲染
-            const { svg } = await mermaid.render(
-              `mermaid-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-              content
-            )
-
-            // 更新内容
-            element.innerHTML = svg
-
-            // 添加暗色模式支持
-            if (theme === 'dark') {
-              const svgElement = element.querySelector('svg')
-              if (svgElement) {
-                svgElement.style.filter = 'invert(0.85)'
-              }
-            }
-          } catch (error) {
-            console.error('Failed to render mermaid diagram:', {
-              error,
-              element,
-              content: element.textContent
-            })
-            element.innerHTML = `
-              <div class="rounded-lg overflow-hidden border border-red-200">
-                <div class="bg-red-50 p-3 text-red-700 text-sm">
-                  Failed to render diagram
-                </div>
-                <pre class="bg-white p-3 m-0 text-sm overflow-x-auto whitespace-pre-wrap break-all">
-                  ${element.textContent || ''}
-                </pre>
-                <div class="bg-red-50 p-3 text-red-600 text-sm border-t border-red-200">
-                  ${error instanceof Error ? error.message : 'Unknown error'}
-                </div>
-              </div>
-            `
-          }
-        }))
-      } catch (error) {
-        console.error('Failed to initialize mermaid diagrams:', error)
-      }
-    }
-
-    if (!isConverting) {
-      renderMermaid()
-    }
-  }, [previewContent, theme, isConverting])
 
   // 监听全屏状态变化
   useEffect(() => {
@@ -239,12 +209,16 @@ export function EditorPreview({
               transition: 'transform 0.2s ease-in-out'
             }}
           >
-            {isConverting ? (
+            {isConverting && (
               <div className="flex flex-col items-center justify-center gap-2 p-8">
                 <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
                 <span className="text-sm text-muted-foreground">正在生成预览...</span>
               </div>
-            ) : PreviewContent}
+            )}
+            {/* 内容容器始终保留，只做增量更新 */}
+            <div className="preview-content py-4">
+              <div ref={articleRef} className="px-6" />
+            </div>
           </div>
         </div>
       </div>
